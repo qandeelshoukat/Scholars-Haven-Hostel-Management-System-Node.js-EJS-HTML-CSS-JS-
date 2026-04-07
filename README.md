@@ -1,2 +1,27 @@
-# Scholars-Haven-Hostel-Management-System-Node.js-EJS-HTML-CSS-JS-
-A full-stack Hostel Management System built using Node.js, Express, EJS, and static frontend technologies. The system streamlines student management, room allocation, complaints handling, and hostel services through an interactive admin dashboard and user-friendly interface.
+# Scholars' Haven – Hostel Management System
+
+## 📌 Overview
+Scholars' Haven is a full-stack Hostel Management System designed to simplify hostel operations such as student registration, room allocation, complaints handling, and service management. It combines static frontend pages with a dynamic EJS-based admin dashboard.
+
+---
+
+## 🚀 Tech Stack
+- Frontend: HTML, CSS, JavaScript  
+- Dashboard: EJS (Embedded JavaScript Templates)  
+- Backend: Node.js, Express.js  
+- Database: MongoDB  
+
+---
+
+## 🎯 Features
+- Student Registration & Login System  
+- Admin Dashboard (EJS  dynamic UI)  
+- Room Allocation Management  
+- Complaint & Message System  
+- Hostel Services Management  
+- Static Website Pages (Home, About, Contact, Blog, etc.)  
+- Responsive Design  
+
+---
+
+## 📁 Project Structure

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - eFinConnect</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to separate CSS file -->
+</head>
+<style>
+    /* General Styles */
+    html, body {
+    height: 100%; /* Ensure the page fills the viewport */
+    margin: 0;
+    padding: 0;
+    background-image: linear-gradient(rgba(4, 9, 30, 0.3), rgba(4, 9, 30, 0.3)), url("public/img2.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat; /* Prevent image repetition */
+    background-attachment: fixed; /* Keep the image fixed while scrolling */
+    position: relative;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    
+    color: #333;
+}
+
+/* Container to manage layout */
+.container {
+    display: flex; /* Enables flexbox layout */
+    height: 100vh; /* Ensures the container takes up the full height of the screen */
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 190px; /* Reduced width from 280px */
+    height: 100%; /* Ensure sidebar takes full height */
+    
+    padding: 20px;
+    color: white;
+}
+
+.sidebar h1 {
+    font-size: 1.6em; /* Slightly reduced font size */
+    margin-bottom: 20px; /* Adjusted margin */
+    text-align: center;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 10px;
+}
+
+.sidebar-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1em;
+    display: block;
+}
+
+/* Main Content Styles */
+.main-content {
+    flex: 1; /* Takes up remaining space */
+    padding: 20px;
+    
+}
+.main-content h2 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.settings-section {
+    margin-bottom: 30px;
+}
+
+.settings-section h3 {
+    margin-bottom: 10px;
+    color: #34495e;
+}
+
+.settings-section label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.settings-section input,
+.settings-section select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.settings-section button {
+    background-color: #3498db;
+    color: #ffffff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.settings-section button:hover {
+    background-color: #2980b9;
+}
+
+/* Danger Button Styles */
+.danger-button {
+    background-color: #e74c3c;
+    color: #ffffff;
+}
+
+.danger-button:hover {
+    background-color: #c0392b;
+}
+
+/* Checkbox styles */
+.settings-section input[type="checkbox"] {
+    display: inline-block;
+    width: auto;
+    margin-right: 10px;
+}
+
+/* Footer Styles */
+footer {
+    margin-top: 20px;
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+}
+
+</style>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h1>eFinConnect</h1>
+            <nav>
+                <ul class="sidebar-menu">
+                    <li><a href="views/dashboard.ejs" class="menu-item">Dashboard</a></li>
+                    <li><a href="settings.html" class="menu-item">Settings</a></li>
+                    <li><a href="logout.html" class="menu-item logout">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>Settings</h2>
+
+            <!-- Profile Settings -->
+            <div class="settings-section">
+                <h3>Profile Settings</h3>
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Enter your username">
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="Enter your email">
+
+                <button>Save Changes</button>
+            </div>
+
+            <!-- Security Settings -->
+            <div class="settings-section">
+                <h3>Security Settings</h3>
+                <label for="password">Change Password:</label>
+                <input type="password" id="password" placeholder="Enter new password">
+
+                <label for="2fa">Two-Factor Authentication:</label>
+                <select id="2fa">
+                    <option value="off">Off</option>
+                    <option value="on">On</option>
+                </select>
+
+                <button>Update Security</button>
+            </div>
+
+            <!-- Notification Preferences -->
+            <div class="settings-section">
+                <h3>Notification Preferences</h3>
+                <label>
+                    <input type="checkbox" name="notifications" value="email"> Email Notifications
+                </label>
+                <label>
+                    <input type="checkbox" name="notifications" value="sms"> SMS Notifications
+                </label>
+
+                <button>Save Preferences</button>
+            </div>
+
+            <!-- Theme Settings -->
+            <div class="settings-section">
+                <h3>Theme Settings</h3>
+                <label for="theme">Select Theme:</label>
+                <select id="theme">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                </select>
+
+                <button>Apply Theme</button>
+            </div>
+
+            <!-- Account Actions -->
+            <div class="settings-section">
+                <h3>Account Actions</h3>
+                <button class="danger-button">Close Account</button>
+            </div>
+
+            <footer>
+                <p>&copy; 2025 VIP Bank. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+</body>
+
+</html>

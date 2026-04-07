@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Link to external CSS -->
+</head>
+<style>
+    /* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+header {
+    background-color: #2c3e50;
+    padding: 20px;
+    color: #fff;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.navbar a:hover {
+    background-color: #34495e;
+    border-radius: 5px;
+}
+
+h1, h2 {
+    margin-bottom: 10px;
+}
+
+/* Account Summary */
+.account-summary {
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.account-summary p {
+    font-size: 16px;
+}
+
+.account-summary strong {
+    font-weight: bold;
+}
+
+/* Form Sections */
+.form-section {
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-section form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-section label {
+    margin-bottom: 5px;
+}
+
+.form-section input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-section button {
+    padding: 10px;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-section button:hover {
+    background-color: #34495e;
+}
+
+/* Transaction History */
+.transactions table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.transactions table th, .transactions table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.transactions table th {
+    background-color: #f1f1f1;
+}
+
+.transactions table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #2c3e50;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+</style>
+<body>
+    <header>
+        <div class="navbar">
+            <h1>Welcome, <%= name %>!</h1>
+            <nav>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/logout">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="account-summary">
+            <h2>Account Information</h2>
+            <div class="account-details">
+                <p><strong>Account Number:</strong> <%= accountNumber %></p>
+                <p><strong>Balance:</strong> $<%= balance %></p>
+            </div>
+        </section>
+
+        <!-- Deposit Form -->
+        <section class="form-section">
+            <h3>Deposit Funds</h3>
+            <form action="/deposit" method="POST">
+                <label for="amount">Amount ($):</label>
+                <input type="number" name="amount" id="amount" required>
+                <label for="description">Description:</label>
+                <input type="text" name="description" id="description">
+                <button type="submit">Deposit</button>
+            </form>
+        </section>
+
+        <!-- Withdrawal Form -->
+        <section class="form-section">
+            <h3>Withdraw Funds</h3>
+            <form action="/withdraw" method="POST">
+                <label for="withdraw-amount">Amount ($):</label>
+                <input type="number" name="amount" id="withdraw-amount" required>
+                <label for="withdraw-description">Description:</label>
+                <input type="text" name="description" id="withdraw-description">
+                <button type="submit">Withdraw</button>
+            </form>
+        </section>
+
+        <!-- Transfer Form -->
+        <section class="form-section">
+            <h3>Transfer Funds</h3>
+            <form action="/transfer" method="POST">
+                <label for="toAccountNumber">To Account Number:</label>
+                <input type="text" name="toAccountNumber" id="toAccountNumber" required>
+                <label for="transfer-amount">Amount ($):</label>
+                <input type="number" name="amount" id="transfer-amount" required>
+                <label for="transfer-description">Description:</label>
+                <input type="text" name="description" id="transfer-description">
+                <button type="submit">Transfer</button>
+            </form>
+        </section>
+
+        <!-- Transactions -->
+        <section class="transactions">
+            <h3>Transaction History</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Amount ($)</th>
+                        <th>Description</th>
+                        <th>Timestamp</th>
+                        <th>To Account</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% transactions.forEach(transaction => { %>
+                        <tr>
+                            <td><%= transaction.type %></td>
+                            <td><%= transaction.amount %></td>
+                            <td><%= transaction.description %></td>
+                            <td><%= transaction.timestamp %></td>
+                            <td><%= transaction.toAccount || 'N/A' %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>MS BANK © 2025</p>
+    </footer>
+</body>
+</html>

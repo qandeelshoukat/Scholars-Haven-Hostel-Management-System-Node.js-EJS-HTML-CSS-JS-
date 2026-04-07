@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholars' Haven</title>
+    <link rel="icon" href="public/icon1.png">
+    <link rel="stylesheet" href="public/Styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    </title>
+</head>
+
+<body>
+    <section class="sub-header">
+        <nav>
+            <a href="food.html"><img src=""></a>
+            <div class="nav-links" id="navLinks">
+                <i class="fa fa-times" onclick="hideMenu()"></i>
+                <ul>
+                    <li><a href="Home.html">HOME</a></li>
+                    <li><a href="About.html">ABOUT</a></li>
+                    <li><a href="Service.html">SERVICES</a></li>
+                    <li><a href="Blog.html">BLOG</a></li>
+                    <li><a href="Contact.html">CONTACT</a></li>
+                </ul>
+            </div>
+            <i class="fa fa-bars" onclick="showMenu()"></i>
+        </nav>
+        <h1>ABOUT US</h1>
+    </section>
+    <!--about us -->
+    <section class="about-us">
+        <div class="row">
+            <div class="about-col">
+                <h1>ABOUT US</h1>
+                <p> Welcome to <b>Scholars Haven</b>, a home away from home for students and travelers. 
+                We provide a safe, comfortable, and community-driven environment where guests
+                 can study, relax, and explore. Conveniently located near universities and key 
+                 attractions, our hostel offers modern amenities, high-speed WiFi, and a friendly 
+                 atmosphere—making every stay enjoyable and hassle-free. </p>
+                <br>
+                <h1>OUR TEAM</h1>
+                <p> At <b>Scholars Haven</b>, our dedicated team ensures a welcoming and well-maintained
+                space. From our friendly front-desk staff to our diligent housekeeping team, 
+                we are committed to providing top-notch hospitality. We go beyond accommodation—we 
+                create an experience where guests feel valued, supported, and at home.</p>
+                <br>
+                <h1>OUR MISSION</h1>
+                <p>Our mission is to offer a safe, affordable, and comfortable living space for
+                 students and travelers. We prioritize security, cleanliness, and community, fostering
+                 an environment where individuals can thrive, connect, and create lasting memories. At 
+                 <b>Scholars Haven</b>, you’re not just a guest—you’re part of a family.</p>
+                <a href="" class="hero-btn red-btn">EXPLORE NOW</a>
+            </div>
+            <div class="about-col">
+                <img src="public/pic2.jpg">
+            </div>
+        </div>
+    </section>
+
+
+
+    <!--footer-->
+    <section class="footer">
+        <h4> About Us </h4>
+        <p><i>"A Safe, Supportive, and Inspiring Space for Students to Live, Learn, and Grow."</i></p>
+        <div class="icons">
+            <i class="fa fa-facebook"></i>
+            <i class="fa fa-twitter"></i>
+            <i class="fa fa-instagram"></i>
+            <i class="fa fa-linkedin"></i>
+            <i class="fa fa-youtube"></i>
+        </div>
+        <p>Made with <i class="fa fa-heart-o"></i> By Qandeel Shaukat</p>
+    </section>
+
+
+
+    <!--java-->
+
+
+    <script>
+        var navLinks = document.getElementById("navLinks");
+        function showMenu() {
+            navLinks.style.right = "0"
+        }
+        function hideMenu() {
+            navLinks.style.right = "-200px"
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholars' Haven</title>
+    <link rel="icon" href="public/icon1.png">
+    <link rel="stylesheet" href="public/Styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    </title>
+</head>
+
+<body>
+    <section class="header">
+        <nav>
+            <a href="Home.html"><img src=""></a>
+            <div class="nav-links" id="navLinks">
+                <i class="fa fa-times" onclick="hideMenu()"></i>
+                <ul>
+                    <li><a href="Home.html">HOME</a></li>
+                        <li><a href="About.html">ABOUT</a></li>
+                        <li><a href="Service.html">SERVICES</a></li>
+                        <li><a href="Blog.html">BLOG</a></li>
+                        <li><a href="Contact.html">CONTACT</a></li>
+                </ul>
+            </div>
+            <i class="fa fa-bars" onclick="showMenu()"></i>
+        </nav>
+        <!-- Registration Form -->
+        <div class="form-box">
+            <form action="/post" method="post" class="form-container">
+                <h2>Sign Up</h2>
+                <p>Already have an account? <a href="login.html">Login</a></p>
+                <input type="text" placeholder="Firstname" id="fname" name="fname" required>
+                <input type="text" placeholder="Lastname" id="lname" name="lname" required>
+                <input type="email" placeholder="Email" id="email" name="email" required>
+                <input type="password" placeholder="Password" id="password" name="password" required>
+                <button class="submit">Register</button>
+                <div class="form-footer">
+                    <label><input type="checkbox" /> Remember Me</label>
+                    <a href="#">Terms & Conditions</a>
+                </div>
+            </form>
+        </div>
+        </div>
+    </section>
+    <script src="script.js"></script>
+</body>
+
+</html>

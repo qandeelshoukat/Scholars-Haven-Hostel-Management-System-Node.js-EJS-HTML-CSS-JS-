@@ -1,0 +1,260 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const bcrypt = require('bcrypt'); // For password hashing
+const path = require('path');
+
+// Initialize Express app
+const app = express();
+
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); // Set views directory
+
+// Session management
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: false,
+}));
+
+// MongoDB connection
+mongoose.connect('mongodb://127.0.0.1:27017/BankingDB', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => console.log('Connected to MongoDB'))
+    .catch((err) => console.error('Error connecting to MongoDB:', err));
+
+// User Schema
+const userSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    role: { type: String, default: 'user' }, // Role: user or admin
+});
+
+// Generate unique account number
+function generateAccountNumber() {
+    return Math.floor(Math.random() * 1000000000); // Random 9 digit number
+}
+
+// Account Schema with account number
+const transactionSchema = new mongoose.Schema({
+    type: { type: String, enum: ['Deposit', 'Withdrawal', 'Transfer'], required: true },
+    amount: { type: Number, required: true },
+    timestamp: { type: Date, default: Date.now },
+    description: { type: String },
+    toAccount: { type: String }, // Store target account for transfer
+});
+
+const accountSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    accountNumber: { type: String, unique: true, default: generateAccountNumber },
+    balance: { type: Number, default: 0 },
+    transactions: [transactionSchema],
+});
+
+// Models
+const User = mongoose.model('User', userSchema);
+const Account = mongoose.model('Account', accountSchema);
+
+// Routes
+
+// Serve Registration Form
+app.get('/register', (req, res) => {
+    res.render('register');
+});
+
+// Handle Registration
+app.post('/register', async (req, res) => {
+    const { name, email, password } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+        const newUser = new User({ name, email, password: hashedPassword });
+        await newUser.save();
+
+        // Create an account for the user with a unique account number
+        const account = new Account({ userId: newUser._id });
+        await account.save();
+
+        res.redirect('/login');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error registering user.');
+    }
+});
+
+// Serve Login Form
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+// Handle Login
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (user && await bcrypt.compare(password, user.password)) {
+            req.session.userId = user._id;
+            req.session.role = user.role;
+            return res.redirect('/dashboard');
+        }
+        res.status(400).send('Invalid credentials.');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error logging in.');
+    }
+});
+
+// Serve Dashboard
+app.get('/dashboard', async (req, res) => {
+    if (!req.session.userId) return res.redirect('/login');
+
+    const account = await Account.findOne({ userId: req.session.userId }).populate('userId', 'name email');
+    res.render('dashboard', {
+        name: account.userId.name,
+        balance: account.balance,
+        accountNumber: account.accountNumber,
+        transactions: account.transactions,
+    });
+});
+
+// Handle Deposit
+app.post('/deposit', async (req, res) => {
+    const { amount, description } = req.body;
+    try {
+        const account = await Account.findOne({ userId: req.session.userId });
+        account.balance += Number(amount);
+        account.transactions.push({ type: 'Deposit', amount, description });
+        await account.save();
+        res.redirect('/dashboard');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error processing deposit.');
+    }
+});
+
+// Handle Withdrawal
+app.post('/withdraw', async (req, res) => {
+    const { amount, description } = req.body;
+    try {
+        const account = await Account.findOne({ userId: req.session.userId });
+        if (account.balance < amount) return res.status(400).send('Insufficient funds.');
+        account.balance -= Number(amount);
+        account.transactions.push({ type: 'Withdrawal', amount, description });
+        await account.save();
+        res.redirect('/dashboard');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error processing withdrawal.');
+    }
+});
+
+// Handle Transfer
+app.post('/transfer', async (req, res) => {
+    const { amount, description, toAccountNumber } = req.body;
+    try {
+        const fromAccount = await Account.findOne({ userId: req.session.userId });
+        const toAccount = await Account.findOne({ accountNumber: toAccountNumber });
+
+        if (!toAccount) {
+            return res.status(400).send('Recipient account not found.');
+        }
+
+        if (fromAccount.balance < amount) {
+            return res.status(400).send('Insufficient funds.');
+        }
+
+        // Transfer the amount
+        fromAccount.balance -= Number(amount);
+        toAccount.balance += Number(amount);
+
+        // Record the transaction
+        fromAccount.transactions.push({
+            type: 'Transfer',
+            amount,
+            description,
+            toAccount: toAccount.accountNumber,
+        });
+
+        toAccount.transactions.push({
+            type: 'Transfer',
+            amount,
+            description,
+            toAccount: fromAccount.accountNumber,
+        });
+
+        await fromAccount.save();
+        await toAccount.save();
+
+        res.redirect('/dashboard');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error processing transfer.');
+    }
+});
+
+// admin registra
+// Serve Admin Registration Form
+app.get('/admin-register', (req, res) => {
+    res.render('admin-register'); // Render the admin registration form
+});
+
+// Handle Admin Registration
+app.post('/admin-register', async (req, res) => {
+    const { name, email, password } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+        const newAdmin = new User({ name, email, password: hashedPassword, role: 'admin' }); // Create admin user
+        await newAdmin.save();
+        res.redirect('/admin-login'); // Redirect to admin login page
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error registering admin.');
+    }
+});
+
+// Admin Panel
+app.get('/admin', async (req, res) => {
+    if (req.session.role !== 'admin') return res.status(403).send('Access denied.');
+
+    const users = await User.find().select('name email');
+    const accounts = await Account.find().populate('userId', 'name email');
+    res.render('admin', { users, accounts });
+});
+
+// Serve Admin Login
+app.get('/admin-login', (req, res) => {
+    res.render('admin-login');
+});
+
+// Handle Admin Login
+app.post('/admin-login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const admin = await User.findOne({ email, role: 'admin' });
+        if (admin && await bcrypt.compare(password, admin.password)) {
+            req.session.userId = admin._id;
+            req.session.role = admin.role;
+            return res.redirect('/admin');
+        }
+        res.status(400).send('Invalid credentials.');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error logging in.');
+    }
+});
+
+// Logout
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => res.redirect('/login'));
+});
+
+// Start the server
+const PORT = process.env.PORT || 3014;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

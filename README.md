@@ -25,3 +25,14 @@ Scholars' Haven is a full-stack Hostel Management System designed to simplify ho
 ---
 
 ## 📁 Project Structure
+Scholars-Haven/
+│── public/
+│ ├── pages/ # HTML files (Home, About, Contact, etc.)
+│ ├── css/
+│ ├── js/
+│
+│── views/ # EJS dashboard files
+│── node_modules/
+│
+│── server2.js # Main backend server
+│── package.json
